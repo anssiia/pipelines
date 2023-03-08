@@ -1,3 +1,6 @@
+from db.database import connect, copy_file, create_table, copy_table
+
+
 class BaseTask:
     """Base Pipeline Task"""
 
@@ -23,6 +26,7 @@ class CopyToFile(BaseTask):
         return f'{self.table} -> {self.output_file}'
 
     def run(self):
+        copy_table(self.table, self.output_file)
         print(f"Copy table `{self.table}` to file `{self.output_file}`")
 
 
@@ -37,7 +41,11 @@ class LoadFile(BaseTask):
         return f'{self.input_file} -> {self.table}'
 
     def run(self):
-        print(f"Load file `{self.input_file}` to table `{self.table}`")
+        flag = copy_file(self.input_file, self.table)
+        if flag:
+            print(f"Load file `{self.input_file}` to table `{self.table}`")
+        else:
+            print(f"Not loaded file `{self.input_file}` to table `{self.table}`")
 
 
 class RunSQL(BaseTask):
@@ -51,8 +59,8 @@ class RunSQL(BaseTask):
         return f'{self.title}'
 
     def run(self):
+        connect(self.sql_query,1)
         print(f"Run SQL ({self.title}):\n{self.sql_query}")
-
 
 
 class CTAS(BaseTask):
@@ -67,4 +75,8 @@ class CTAS(BaseTask):
         return f'{self.title}'
 
     def run(self):
-        print(f"Create table `{self.table}` as SELECT:\n{self.sql_query}")
+        flag = create_table(self.table, self.sql_query)
+        if flag:
+            print(f"Create table `{self.table}` as SELECT:\n{self.sql_query}")
+        else:
+            print(f"Not create table `{self.table}` as SELECT:\n{self.sql_query}")

@@ -1,4 +1,6 @@
-from db.database import connect, copy_file, create_table, copy_table
+from db.database import PostrgesDB
+
+db = PostrgesDB()
 
 
 class BaseTask:
@@ -26,7 +28,7 @@ class CopyToFile(BaseTask):
         return f'{self.table} -> {self.output_file}'
 
     def run(self):
-        copy_table(self.table, self.output_file)
+        db.copy_table(self.table, self.output_file)
         print(f"Copy table `{self.table}` to file `{self.output_file}`")
 
 
@@ -41,11 +43,8 @@ class LoadFile(BaseTask):
         return f'{self.input_file} -> {self.table}'
 
     def run(self):
-        flag = copy_file(self.input_file, self.table)
-        if flag:
-            print(f"Load file `{self.input_file}` to table `{self.table}`")
-        else:
-            print(f"Not loaded file `{self.input_file}` to table `{self.table}`")
+        db.copy_file(self.input_file, self.table)
+        print(f"Load file `{self.input_file}` to table `{self.table}`")
 
 
 class RunSQL(BaseTask):
@@ -59,7 +58,7 @@ class RunSQL(BaseTask):
         return f'{self.title}'
 
     def run(self):
-        connect(self.sql_query,0)
+        db.run(self.sql_query)
         print(f"Run SQL ({self.title}):\n{self.sql_query}")
 
 
@@ -75,8 +74,5 @@ class CTAS(BaseTask):
         return f'{self.title}'
 
     def run(self):
-        flag = create_table(self.table, self.sql_query)
-        if flag:
-            print(f"Create table `{self.table}` as SELECT:\n{self.sql_query}")
-        else:
-            print(f"Not create table `{self.table}` as SELECT:\n{self.sql_query}")
+        db.create_table(self.table, self.sql_query)
+        print(f"Create table `{self.table}` as SELECT:\n{self.sql_query}")

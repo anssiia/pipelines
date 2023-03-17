@@ -14,14 +14,14 @@ TASKS = [
         '''
     ),
     tasks.RunSQL('select * from norm'),
-    tasks.CopyToFile(
-        table='norm',
-        output_file='C:/Users/Idea/PycharmProjects/pipelines/norm.csv',
-    ),
+    # tasks.CopyToFile(
+    #     table='norm',
+    #     output_file="C:/Users/sz230/PycharmProjects/pipelines/norm.csv",
+    # ),
     #
     # # clean up:
-    # tasks.RunSQL('drop table original'),
-    # tasks.RunSQL('drop table norm'),
+    tasks.RunSQL('drop table original'),
+    tasks.RunSQL('drop table norm'),
 ]
 
 pipeline = Pipeline(

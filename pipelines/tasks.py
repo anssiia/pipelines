@@ -59,7 +59,7 @@ class RunSQL(BaseTask):
         return f'{self.title}'
 
     def run(self):
-        connect(self.sql_query,1)
+        connect(self.sql_query,0)
         print(f"Run SQL ({self.title}):\n{self.sql_query}")
 
 

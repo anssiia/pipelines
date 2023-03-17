@@ -1,8 +1,9 @@
 import psycopg2
+import csv
 
 db_name = 'db_pipeline'
 user = 'postgres'
-password = '*****'
+password = '1234'
 host = 'localhost'
 port = '5432'
 
@@ -48,6 +49,9 @@ def copy_file(file, table):
         with open(file, 'r') as f:
             next(f)
             cursor.copy_from(f, table, sep=',')
+        # query = "COPY " + table + " FROM %s DELIMITER ‘,’ CSV HEADER;"
+        # cursor.execute(query,(file,))
+
     except psycopg2.Error as error:
         print(f"Error connecting to database {db_name}", error)
         return False
@@ -71,6 +75,9 @@ def create_table(table, task):
             cur.execute('select split_part(%s, %s, 3);', (row[2], '/',))
             domain = cur.fetchone()
             cursor.execute(query, (row[0], row[1], row[2], domain[0],))
+        # query = "COPY " + table + " FROM %s DELIMITER ‘,’ CSV HEADER;"
+        # cursor.execute(query)
+
     except psycopg2.Error as error:
         print(f"Error connecting to database {db_name}", error)
         return False
@@ -80,13 +87,14 @@ def create_table(table, task):
 
 # Copy table to file
 def copy_table(table, file):
-    query = ('COPY ' + table + ' TO %s CSV HEADER;')
+
+    query = ("COPY " + table + " TO %s CSV HEADER DELIMITER ',';")
     cursor.execute(query, (file,))
 
     # try:
     #     with open(file, 'w') as f:
     #         next(f)
-    #         cursor.copy_from(f, table, sep=',')
+    #         cursor.copy_to(f, table, sep=',')
     # except psycopg2.Error as error:
     #     print(f"Error connecting to database {db_name}", error)
     #     return False

@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  pipelines_main:
+    build: .
+    container_name: pipelines_container
+    volumes:
+      - ./original:/original
+      - ./norm:/norm
+
+  postgres:
+    image: 'postgres:15.2'
+    environment:
+      POSTGRES_DB: "db_pipeline"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"

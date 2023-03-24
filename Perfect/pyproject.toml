@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "perfect"
+version = "0.1.0"
+description = "Perfect"
+authors = ["stepanova <AStepanova500@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+prefect = {extras = ["viz"], version = "^2.7.12"}
+pandas = "^1.5.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

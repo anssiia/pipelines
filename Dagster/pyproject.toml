@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "dagster"
+version = "0.1.0"
+description = "Dagster"
+authors = ["stepanova <AStepanova500@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dagster = "^1.1.17"
+pandas = "^1.5.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

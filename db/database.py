@@ -44,7 +44,7 @@ class PostrgesDB:
             print(f"Error connection to database {db_name}", error)
 
     # Create function get domain from original table url
-    def get_domain(self, url):
+    def get_domain(self):
         try:
             query = f"CREATE OR REPLACE FUNCTION domain_of_url(url VARCHAR) RETURNS VARCHAR " \
                     "AS $$ " \

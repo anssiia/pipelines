@@ -43,6 +43,10 @@ class LoadFile(BaseTask):
         return f'{self.input_file} -> {self.table}'
 
     def run(self):
+        query = 'CREATE TABLE IF NOT EXISTS ' + self.table + '(id int NOT NULL,' \
+                                                             'name VARCHAR(50), ' \
+                                                             'url VARCHAR(50)); '
+        db.run(query)
         db.copy_file(self.input_file, self.table)
         print(f"Load file `{self.input_file}` to table `{self.table}`")
 

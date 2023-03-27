@@ -30,6 +30,7 @@ class PostrgesDB:
     # Copy file to table
     def copy_file(self, input_file, table):
         try:
+
             query = f"COPY {table} FROM STDIN DELIMITER ',' CSV HEADER"
             self.cursor.copy_expert(query, open(input_file, "r"))
         except psycopg2.Error as error:
@@ -49,7 +50,7 @@ class PostrgesDB:
             query = f"CREATE OR REPLACE FUNCTION domain_of_url(url VARCHAR) RETURNS VARCHAR " \
                     "AS $$ " \
                     "BEGIN " \
-                    "SELECT split_part({url},'/',3);" \
+                    "PERFORM RETURN QUERY (SELECT split_part({url},'/',3));" \
                     "END; " \
                     "$$ LANGUAGE plpgsql;"
             self.cursor.execute(query)
@@ -61,6 +62,7 @@ class PostrgesDB:
     def create_table(self, table, task):
         try:
             query = f"CREATE TABLE IF NOT EXISTS {table} AS {task}"
+            self.get_domain()
             self.cursor.execute(query)
         except psycopg2.Error as error:
             print(f"Error connection to database {db_name}", error)
